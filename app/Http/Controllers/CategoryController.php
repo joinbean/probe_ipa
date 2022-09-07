@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
@@ -37,7 +38,11 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $category = Category::create(['name' => $request->name]);
+        $category = new Category();
+        $category->user_id = auth('sanctum')->user()->id;
+        $category->name = $request->name;
+        $category->color_id = $request->color_id;
+        $category->save();
 
         return response()->json(['message' => 'success'], 200);
     }
