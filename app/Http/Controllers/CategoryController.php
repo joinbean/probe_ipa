@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
@@ -15,19 +14,10 @@ class CategoryController extends Controller
      */
     public function index()
     {
+        $user = auth('sanctum')->user();
         return response()->json([
-            Category::all()
+            $user->categories
         ]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -38,10 +28,15 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'color_id' => 'required|exists:colors,id'
+        ]);
+
         $category = new Category();
         $category->user_id = auth('sanctum')->user()->id;
-        $category->name = $request->name;
-        $category->color_id = $request->color_id;
+        $category->name = $validated['name'];
+        $category->color_id = $validated['color_id'];
         $category->save();
 
         return response()->json(['message' => 'success'], 200);
@@ -59,17 +54,6 @@ class CategoryController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Category  $category
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Category $category)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -78,7 +62,13 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        $category->update(['name' => $request->name]);
+        $validated = $request->validate([
+            'name' => 'string|max:255',
+            'color_id' => 'exists:colors,id'
+        ]);
+
+        $category->name         =   array_key_exists('name', $validated)        ? $validated['name']        : $category->name;
+        $category->color_id     =   array_key_exists('color_id', $validated)    ? $validated['color_id']    : $category->color_id;
 
         $category->save();
 
