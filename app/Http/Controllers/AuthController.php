@@ -9,6 +9,47 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
+    /**
+     * @OA\Post(
+     *     path="/register",
+     *     tags={"Users"},
+     *     summary="Register a new user",
+     *     description="Registers a new user",
+     *     @OA\RequestBody(
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\Schema(
+     *                @OA\Property(
+     *                    property="name",
+     *                    type="string"
+     *                ),
+     *                @OA\Property(
+     *                    property="email",
+     *                    type="string"
+     *                ),
+     *                @OA\Property(
+     *                    property="password",
+     *                    type="string"
+     *                ),
+     *                example={
+     *                      "name": "Smithy", 
+     *                      "email": "johny.smith@combobo.io", 
+     *                      "password": "password"
+     *                }
+     *              )
+     *              
+     *          )
+     *     ),
+     *     @OA\Response(
+     *          response="201", 
+     *          description="Successful operation.",
+     *          @OA\JsonContent(
+     *              @OA\Examples(example="result", value={"access_token": "2|eLYk1swwVOugon1Ti6fCzO8IozLc7GJoyATDLmRv",
+     *	            "token_type": "Bearer"}, summary="A result object.")
+    *          )
+    *     )
+    * )
+    */
     public function register(Request $request)
     {
         $post_data = $request->validate([
@@ -31,6 +72,42 @@ class AuthController extends Controller
         ]);
     }
  
+    /**
+     * @OA\Post(
+     *     path="/login",
+     *     tags={"Users"},
+     *     summary="Login as user",
+     *     description="Logs in a user",
+     *     @OA\RequestBody(
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\Schema(
+     *                @OA\Property(
+     *                    property="email",
+     *                    type="string"
+     *                ),
+     *                @OA\Property(
+     *                    property="password",
+     *                    type="string"
+     *                ),
+     *                example={
+     *                      "email": "johny.smith@combobo.io", 
+     *                      "password": "password"
+     *                }
+     *              )
+     *              
+     *          )
+     *     ),
+     *     @OA\Response(
+     *          response="200", 
+     *          description="Successful operation.",
+     *          @OA\JsonContent(
+     *              @OA\Examples(example="result", value={"access_token": "2|eLYk1swwVOugon1Ti6fCzO8IozLc7GJoyATDLmRv",
+     *	            "token_type": "Bearer"}, summary="A result object.")
+    *          )
+    *     )
+    * )
+    */
     public function login(Request $request)
     {
     if (!Auth::attempt($request->only('email', 'password'))) {

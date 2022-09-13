@@ -1,0 +1,1006 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Trophy management API",
+        "description": "API to manage trophies",
+        "contact": {
+            "email": "julien.raedler@twofold.swiss"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://my-default-host.com",
+            "description": "Trophy Manager API Server"
+        }
+    ],
+    "paths": {
+        "/register": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Register a new user",
+                "description": "Registers a new user",
+                "operationId": "0903f2e0df1a8857bee538fc055417f0",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "name": "Smithy",
+                                    "email": "johny.smith@combobo.io",
+                                    "password": "password"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation.",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "examples": {
+                                    "result": {
+                                        "summary": "A result object.",
+                                        "value": {
+                                            "access_token": "2|eLYk1swwVOugon1Ti6fCzO8IozLc7GJoyATDLmRv",
+                                            "token_type": "Bearer"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Login as user",
+                "description": "Logs in a user",
+                "operationId": "2dd578ff7aba2721293dac66833b27d1",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "email": "johny.smith@combobo.io",
+                                    "password": "password"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation.",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "examples": {
+                                    "result": {
+                                        "summary": "A result object.",
+                                        "value": {
+                                            "access_token": "2|eLYk1swwVOugon1Ti6fCzO8IozLc7GJoyATDLmRv",
+                                            "token_type": "Bearer"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/categories": {
+            "get": {
+                "tags": [
+                    "Categories"
+                ],
+                "summary": "Get list of categories",
+                "description": "Returns list of categories",
+                "operationId": "ead5fb1cf2a7453acb2e37928a1b1eaf",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Categories"
+                ],
+                "summary": "Store new category",
+                "description": "Returns category data",
+                "operationId": "bb02f0320882db37f99574196577e446",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "color_id": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "id": 1,
+                                    "user_id": 1,
+                                    "name": "Tennis",
+                                    "category_type_id": "2"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation.",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "examples": {
+                                    "result": {
+                                        "summary": "A result object.",
+                                        "value": {
+                                            "success": true
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "The given data was invalid."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/categories/{id}": {
+            "get": {
+                "tags": [
+                    "Categories"
+                ],
+                "summary": "Get categories information",
+                "description": "Returns categories data",
+                "operationId": "4cdf41756315109f1efc72787db5830a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "category id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation.",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "examples": {
+                                    "result": {
+                                        "summary": "A categories.",
+                                        "value": {
+                                            "id": 1,
+                                            "name": "Tennis",
+                                            "color_id": "1",
+                                            "created_at": "2022-07-29 07:53:36",
+                                            "updated_at": "2022-07-29 07:53:36"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Categories"
+                ],
+                "summary": "Update categories information",
+                "description": "Updates categories data",
+                "operationId": "19954b1f8aa4916b5f032dc28ea36a24",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "categories id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "color_id": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "name": "Tennis",
+                                    "color_id": "1"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation.",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "examples": {
+                                    "result": {
+                                        "summary": "A categories.",
+                                        "value": {
+                                            "id": 1,
+                                            "name": "Tennis",
+                                            "color_id": "1",
+                                            "created_at": "2022-07-29 07:53:36",
+                                            "updated_at": "2022-07-29 07:53:36"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "The given data was invalid."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Categories"
+                ],
+                "summary": "Delete existing categories",
+                "description": "Deletes a record",
+                "operationId": "f1b8af6e84bd52b9594d98bde748ebd6",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "categories id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation.",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No such categories."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/colors": {
+            "get": {
+                "tags": [
+                    "Colors"
+                ],
+                "summary": "Get list of colors",
+                "description": "Returns list of colors",
+                "operationId": "b7c785cff73eda4725b257c93f948de7",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/trophies": {
+            "get": {
+                "tags": [
+                    "Trophies"
+                ],
+                "summary": "Get list of trophies",
+                "description": "Returns list of trophies",
+                "operationId": "3a3bd2932ed0973968dc34b753bb194d",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Trophies"
+                ],
+                "summary": "Store new trophies",
+                "description": "Returns trophies data",
+                "operationId": "161f6c0e2e31e2368d78d40f1aa4ffb7",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "type_id": {
+                                        "type": "integer"
+                                    },
+                                    "title": {
+                                        "type": "string"
+                                    },
+                                    "ranking": {
+                                        "type": "integer"
+                                    },
+                                    "date": {
+                                        "type": "string",
+                                        "format": "date"
+                                    },
+                                    "category_id": {
+                                        "type": "integer"
+                                    },
+                                    "place": {
+                                        "type": "string"
+                                    },
+                                    "oponent": {
+                                        "type": "string"
+                                    },
+                                    "score": {
+                                        "type": "string"
+                                    },
+                                    "price": {
+                                        "type": "integer"
+                                    },
+                                    "club_name": {
+                                        "type": "string"
+                                    },
+                                    "image": {
+                                        "type": "image"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "type_id": "1",
+                                    "title": "Tournament",
+                                    "ranking": "1",
+                                    "date": "2000-01-01",
+                                    "category_id": "1",
+                                    "place": "New York",
+                                    "oponent": "Bad Guys",
+                                    "score": "80/0",
+                                    "price": "50000",
+                                    "club_name": "NY Sports Club",
+                                    "image": "image.jpg"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation.",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "examples": {
+                                    "result": {
+                                        "summary": "A result object.",
+                                        "value": {
+                                            "success": true
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "The given data was invalid."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/trophies/{id}": {
+            "get": {
+                "tags": [
+                    "Trophies"
+                ],
+                "summary": "Get trophies information",
+                "description": "Returns trophies data",
+                "operationId": "a3f9d21fdac55da71dbc7c0e4978bb30",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "trophies id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation.",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "examples": {
+                                    "result": {
+                                        "summary": "A trophies.",
+                                        "value": {
+                                            "id": 1,
+                                            "type_id": "1",
+                                            "title": "Tournament",
+                                            "ranking": "1",
+                                            "date": "2000-01-01",
+                                            "category_id": "1",
+                                            "place": "New York",
+                                            "oponent": "Bad Guys",
+                                            "score": "80/0",
+                                            "price": "50000",
+                                            "club_name": "NY Sports Club",
+                                            "image": "image.jpg",
+                                            "created_at": "2022-07-29 07:53:36",
+                                            "updated_at": "2022-07-29 07:53:36"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Trophies"
+                ],
+                "summary": "Update trophy information",
+                "description": "Updates trophy data",
+                "operationId": "816a4365cd9ff16451173bf210576d4f",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "trophy id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "type_id": {
+                                        "type": "integer"
+                                    },
+                                    "title": {
+                                        "type": "string"
+                                    },
+                                    "ranking": {
+                                        "type": "integer"
+                                    },
+                                    "date": {
+                                        "type": "string",
+                                        "format": "date"
+                                    },
+                                    "category_id": {
+                                        "type": "integer"
+                                    },
+                                    "place": {
+                                        "type": "string"
+                                    },
+                                    "oponent": {
+                                        "type": "string"
+                                    },
+                                    "score": {
+                                        "type": "string"
+                                    },
+                                    "price": {
+                                        "type": "integer"
+                                    },
+                                    "club_name": {
+                                        "type": "string"
+                                    },
+                                    "image": {
+                                        "type": "image"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "type_id": "1",
+                                    "title": "Tournament",
+                                    "ranking": "1",
+                                    "date": "2000-01-01",
+                                    "category_id": "1",
+                                    "place": "New York",
+                                    "oponent": "Bad Guys",
+                                    "score": "80/0",
+                                    "price": "50000",
+                                    "club_name": "NY Sports Club",
+                                    "image": "image.jpg"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation.",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "examples": {
+                                    "result": {
+                                        "summary": "A trophies.",
+                                        "value": {
+                                            "id": 1,
+                                            "type_id": "1",
+                                            "title": "Tournament",
+                                            "ranking": "1",
+                                            "date": "2000-01-01",
+                                            "category_id": "1",
+                                            "place": "New York",
+                                            "oponent": "Bad Guys",
+                                            "score": "80/0",
+                                            "price": "50000",
+                                            "club_name": "NY Sports Club",
+                                            "image": "image.jpg",
+                                            "created_at": "2022-07-29 07:53:36",
+                                            "updated_at": "2022-07-29 07:53:36"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "The given data was invalid."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Trophies"
+                ],
+                "summary": "Delete existing trophy",
+                "description": "Deletes a record",
+                "operationId": "fcf210a7718563073e983e1b394206ea",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "trophy id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation.",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No such trophy."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/trophies/sortByDate": {
+            "get": {
+                "tags": [
+                    "Trophies"
+                ],
+                "summary": "Get trophies information",
+                "description": "Returns trophies data",
+                "operationId": "97fa2657c7772d3a51f33d15c0f71314",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation.",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "examples": {
+                                    "result": {
+                                        "summary": "A trophies.",
+                                        "value": {
+                                            "id": 1,
+                                            "type_id": "1",
+                                            "title": "Tournament",
+                                            "ranking": "1",
+                                            "date": "2000-01-01",
+                                            "category_id": "1",
+                                            "place": "New York",
+                                            "oponent": "Bad Guys",
+                                            "score": "80/0",
+                                            "price": "50000",
+                                            "club_name": "NY Sports Club",
+                                            "image": "image.jpg",
+                                            "created_at": "2022-07-29 07:53:36",
+                                            "updated_at": "2022-07-29 07:53:36"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/trophies/sortByRank": {
+            "get": {
+                "tags": [
+                    "Trophies"
+                ],
+                "summary": "Get trophies information",
+                "description": "Returns trophies data",
+                "operationId": "4387f68706465452ee294b99ece4226f",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation.",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "examples": {
+                                    "result": {
+                                        "summary": "A trophies.",
+                                        "value": {
+                                            "id": 1,
+                                            "type_id": "1",
+                                            "title": "Tournament",
+                                            "ranking": "1",
+                                            "date": "2000-01-01",
+                                            "category_id": "1",
+                                            "place": "New York",
+                                            "oponent": "Bad Guys",
+                                            "score": "80/0",
+                                            "price": "50000",
+                                            "club_name": "NY Sports Club",
+                                            "image": "image.jpg",
+                                            "created_at": "2022-07-29 07:53:36",
+                                            "updated_at": "2022-07-29 07:53:36"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/trophies/filterByType{id}": {
+            "get": {
+                "tags": [
+                    "Trophies"
+                ],
+                "summary": "Get trophies information",
+                "description": "Returns trophies data",
+                "operationId": "3bb19ae65a50a24ad2ea0d5a7d5256c2",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "trophies id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation.",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "examples": {
+                                    "result": {
+                                        "summary": "A trophies.",
+                                        "value": {
+                                            "id": 1,
+                                            "type_id": "1",
+                                            "title": "Tournament",
+                                            "ranking": "1",
+                                            "date": "2000-01-01",
+                                            "category_id": "1",
+                                            "place": "New York",
+                                            "oponent": "Bad Guys",
+                                            "score": "80/0",
+                                            "price": "50000",
+                                            "club_name": "NY Sports Club",
+                                            "image": "image.jpg",
+                                            "created_at": "2022-07-29 07:53:36",
+                                            "updated_at": "2022-07-29 07:53:36"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/trophies/filterByRank/{rank}": {
+            "get": {
+                "tags": [
+                    "Trophies"
+                ],
+                "summary": "Get trophies information",
+                "description": "Returns trophies data",
+                "operationId": "dee1b7e8946273b9f92c908d843d0416",
+                "parameters": [
+                    {
+                        "name": "rank",
+                        "in": "path",
+                        "description": "rank value",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation.",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "examples": {
+                                    "result": {
+                                        "summary": "A trophies.",
+                                        "value": {
+                                            "id": 1,
+                                            "type_id": "1",
+                                            "title": "Tournament",
+                                            "ranking": "1",
+                                            "date": "2000-01-01",
+                                            "category_id": "1",
+                                            "place": "New York",
+                                            "oponent": "Bad Guys",
+                                            "score": "80/0",
+                                            "price": "50000",
+                                            "club_name": "NY Sports Club",
+                                            "image": "image.jpg",
+                                            "created_at": "2022-07-29 07:53:36",
+                                            "updated_at": "2022-07-29 07:53:36"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/trophies/filterByCategory/{id}": {
+            "get": {
+                "tags": [
+                    "Trophies"
+                ],
+                "summary": "Get trophies information",
+                "description": "Returns trophies data",
+                "operationId": "df3756fc95d656dc9679a185cb4286d2",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "category id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation.",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "examples": {
+                                    "result": {
+                                        "summary": "A trophies.",
+                                        "value": {
+                                            "id": 1,
+                                            "type_id": "1",
+                                            "title": "Tournament",
+                                            "ranking": "1",
+                                            "date": "2000-01-01",
+                                            "category_id": "1",
+                                            "place": "New York",
+                                            "oponent": "Bad Guys",
+                                            "score": "80/0",
+                                            "price": "50000",
+                                            "club_name": "NY Sports Club",
+                                            "image": "image.jpg",
+                                            "created_at": "2022-07-29 07:53:36",
+                                            "updated_at": "2022-07-29 07:53:36"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/types": {
+            "get": {
+                "tags": [
+                    "Types"
+                ],
+                "summary": "Get list of types",
+                "description": "Returns list of types",
+                "operationId": "77574096359098e1e67c3af4d13cf51c",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Users",
+            "description": "API Endpoints of Users"
+        },
+        {
+            "name": "Types",
+            "description": "API Endpoints of Types"
+        },
+        {
+            "name": "Colors",
+            "description": "API Endpoints of Colors"
+        },
+        {
+            "name": "Categories",
+            "description": "API Endpoints of Categories"
+        },
+        {
+            "name": "Trophies",
+            "description": "API Endpoints of Trophies"
+        }
+    ]
+}

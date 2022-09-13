@@ -2,15 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Trophy;
+use App\Models\Type;
 use Illuminate\Http\Request;
 
 class TrophyController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @OA\Get(
+     *     path="/trophies",
+     *     tags={"Trophies"},
+     *     summary="Get list of trophies",
+     *     description="Returns list of trophies",
+     *     security={{"bearer_token":{}}},
+     *     @OA\Response(
+     *          response="200", 
+     *          description="Successful operation."
+     *     )
+     * )
      */
     public function index()
     {
@@ -21,10 +31,88 @@ class TrophyController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @OA\Post(
+     *     path="/trophies",
+     *     tags={"Trophies"},
+     *     summary="Store new trophies",
+     *     description="Returns trophies data",
+     *     security={{"bearer_token":{}}},
+     *     @OA\RequestBody(
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\Schema(
+     *                @OA\Property(
+     *                    property="type_id",
+     *                    type="integer"
+     *                ),
+     *                @OA\Property(
+     *                    property="title",
+     *                    type="string"
+     *                ),
+     *                @OA\Property(
+     *                    property="ranking",
+     *                    type="integer"
+     *                ),
+     *                @OA\Property(
+     *                    property="date",
+     *                    type="date"
+     *                ),
+     *                @OA\Property(
+     *                    property="category_id",
+     *                    type="integer"
+     *                ),
+     *                 @OA\Property(
+     *                    property="place",
+     *                    type="string"
+     *                ),
+     *                 @OA\Property(
+     *                    property="oponent",
+     *                    type="string"
+     *                ),
+     *                 @OA\Property(
+     *                    property="score",
+     *                    type="string"
+     *                ),
+     *                 @OA\Property(
+     *                    property="price",
+     *                    type="integer"
+     *                ),
+     *                 @OA\Property(
+     *                    property="club_name",
+     *                    type="string"
+     *                ),
+     *                 @OA\Property(
+     *                    property="image",
+     *                    type="image"
+     *                ),
+     *                example={
+     *                      "type_id": "1", 
+     *                      "title": "Tournament",
+     *                      "ranking": "1",
+     *                      "date": "2000-01-01",
+     *                      "category_id": "1",
+     *                      "place": "New York",
+     *                      "oponent": "Bad Guys",
+     *                      "score": "80/0",
+     *                      "price": "50000",
+     *                      "club_name": "NY Sports Club",
+     *                      "image": "image.jpg"
+     *                }
+     *              )
+     *              
+     *          )
+     *     ),
+     *     @OA\Response(
+     *          response="201", 
+     *          description="Successful operation.",
+     *          @OA\JsonContent(
+     *              @OA\Examples(example="result", value={"success": true}, summary="A result object.")
+     *          )
+     *     ),
+     *     @OA\Response(
+     *          response="422",
+     *          description="The given data was invalid.")
+     * )
      */
     public function store(Request $request)
     {
@@ -66,10 +154,44 @@ class TrophyController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Trophy  $trophy
-     * @return \Illuminate\Http\Response
+     * @OA\Get(
+     *     path="/trophies/{id}",
+     *     tags={"Trophies"},
+     *     summary="Get trophies information",
+     *     description="Returns trophies data",
+     *     security={{"bearer_token":{}}},
+     *     @OA\Parameter(
+     *          name="id",
+     *          description="trophies id",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *     ),
+     *     @OA\Response(
+     *          response="200", 
+     *          description="Successful operation.",
+     *          @OA\JsonContent(
+     *              @OA\Examples(example="result", value={
+     *                      "id": 1, 
+     *                      "type_id": "1", 
+     *                      "title": "Tournament",
+     *                      "ranking": "1",
+     *                      "date": "2000-01-01",
+     *                      "category_id": "1",
+     *                      "place": "New York",
+     *                      "oponent": "Bad Guys",
+     *                      "score": "80/0",
+     *                      "price": "50000",
+     *                      "club_name": "NY Sports Club",
+     *                      "image": "image.jpg",
+     *                      "created_at": "2022-07-29 07:53:36", 
+     *                      "updated_at": "2022-07-29 07:53:36"
+     *              }, summary="A trophies.")
+     *          )
+     *     )
+     * )
      */
     public function show(Trophy $trophy)
     {
@@ -77,11 +199,112 @@ class TrophyController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Trophy  $trophy
-     * @return \Illuminate\Http\Response
+     * @OA\Put(
+     *     path="/trophies/{id}",
+     *     tags={"Trophies"},
+     *     summary="Update trophy information",
+     *     description="Updates trophy data",
+     *     security={{"bearer_token":{}}},
+     *     @OA\Parameter(
+     *          name="id",
+     *          description="trophy id",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *     ),
+     *     @OA\RequestBody(
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\Schema(
+     *                @OA\Property(
+     *                    property="type_id",
+     *                    type="integer"
+     *                ),
+     *                @OA\Property(
+     *                    property="title",
+     *                    type="string"
+     *                ),
+     *                @OA\Property(
+     *                    property="ranking",
+     *                    type="integer"
+     *                ),
+     *                @OA\Property(
+     *                    property="date",
+     *                    type="date"
+     *                ),
+     *                @OA\Property(
+     *                    property="category_id",
+     *                    type="integer"
+     *                ),
+     *                 @OA\Property(
+     *                    property="place",
+     *                    type="string"
+     *                ),
+     *                 @OA\Property(
+     *                    property="oponent",
+     *                    type="string"
+     *                ),
+     *                 @OA\Property(
+     *                    property="score",
+     *                    type="string"
+     *                ),
+     *                 @OA\Property(
+     *                    property="price",
+     *                    type="integer"
+     *                ),
+     *                 @OA\Property(
+     *                    property="club_name",
+     *                    type="string"
+     *                ),
+     *                 @OA\Property(
+     *                    property="image",
+     *                    type="image"
+     *                ),
+     *                example={
+     *                      "type_id": "1", 
+     *                      "title": "Tournament",
+     *                      "ranking": "1",
+     *                      "date": "2000-01-01",
+     *                      "category_id": "1",
+     *                      "place": "New York",
+     *                      "oponent": "Bad Guys",
+     *                      "score": "80/0",
+     *                      "price": "50000",
+     *                      "club_name": "NY Sports Club",
+     *                      "image": "image.jpg"
+     *                }
+     *              )
+     *              
+     *          )
+     *     ),
+     *     @OA\Response(
+     *          response="200", 
+     *          description="Successful operation.",
+     *          @OA\JsonContent(
+     *              @OA\Examples(example="result", value={
+     *                      "id": 1, 
+     *                      "type_id": "1", 
+     *                      "title": "Tournament",
+     *                      "ranking": "1",
+     *                      "date": "2000-01-01",
+     *                      "category_id": "1",
+     *                      "place": "New York",
+     *                      "oponent": "Bad Guys",
+     *                      "score": "80/0",
+     *                      "price": "50000",
+     *                      "club_name": "NY Sports Club",
+     *                      "image": "image.jpg",
+     *                      "created_at": "2022-07-29 07:53:36", 
+     *                      "updated_at": "2022-07-29 07:53:36"
+     *              }, summary="A trophies.")
+     *          )
+     *     ),
+     *     @OA\Response(
+     *          response="422",
+     *          description="The given data was invalid.")
+     * )
      */
     public function update(Request $request, Trophy $trophy)
     {
@@ -121,15 +344,242 @@ class TrophyController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Trophy  $trophy
-     * @return \Illuminate\Http\Response
+     * @OA\Delete(
+     *     path="/trophies/{id}",
+     *     tags={"Trophies"},
+     *     summary="Delete existing trophy",
+     *     description="Deletes a record",
+     *     security={{"bearer_token":{}}},
+     *     @OA\Parameter(
+     *          name="id",
+     *          description="trophy id",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *     ),
+     *     @OA\Response(
+     *          response="200", 
+     *          description="Successful operation.",
+     *          @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *          response="404",
+     *          description="No such trophy.")
+     * )
      */
     public function destroy(Trophy $trophy)
     {
         $trophy->delete();
 
         return response()->json(['message' => 'success'], 200);
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/trophies/sortByDate",
+     *     tags={"Trophies"},
+     *     summary="Get trophies information",
+     *     description="Returns trophies data",
+     *     security={{"bearer_token":{}}},
+     *     @OA\Response(
+     *          response="200", 
+     *          description="Successful operation.",
+     *          @OA\JsonContent(
+     *              @OA\Examples(example="result", value={
+     *                      "id": 1, 
+     *                      "type_id": "1", 
+     *                      "title": "Tournament",
+     *                      "ranking": "1",
+     *                      "date": "2000-01-01",
+     *                      "category_id": "1",
+     *                      "place": "New York",
+     *                      "oponent": "Bad Guys",
+     *                      "score": "80/0",
+     *                      "price": "50000",
+     *                      "club_name": "NY Sports Club",
+     *                      "image": "image.jpg",
+     *                      "created_at": "2022-07-29 07:53:36", 
+     *                      "updated_at": "2022-07-29 07:53:36"
+     *              }, summary="A trophies.")
+     *          )
+     *     )
+     * )
+     */
+    public function sortByDate()
+    {
+        return Trophy::orderBy('date')->get();
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/trophies/sortByRank",
+     *     tags={"Trophies"},
+     *     summary="Get trophies information",
+     *     description="Returns trophies data",
+     *     security={{"bearer_token":{}}},
+     *     @OA\Response(
+     *          response="200", 
+     *          description="Successful operation.",
+     *          @OA\JsonContent(
+     *              @OA\Examples(example="result", value={
+     *                      "id": 1, 
+     *                      "type_id": "1", 
+     *                      "title": "Tournament",
+     *                      "ranking": "1",
+     *                      "date": "2000-01-01",
+     *                      "category_id": "1",
+     *                      "place": "New York",
+     *                      "oponent": "Bad Guys",
+     *                      "score": "80/0",
+     *                      "price": "50000",
+     *                      "club_name": "NY Sports Club",
+     *                      "image": "image.jpg",
+     *                      "created_at": "2022-07-29 07:53:36", 
+     *                      "updated_at": "2022-07-29 07:53:36"
+     *              }, summary="A trophies.")
+     *          )
+     *     )
+     * )
+     */
+    public function sortByRank()
+    {
+        return Trophy::orderBy('ranking')->get();
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/trophies/filterByType{id}",
+     *     tags={"Trophies"},
+     *     summary="Get trophies information",
+     *     description="Returns trophies data",
+     *     security={{"bearer_token":{}}},
+     *     @OA\Parameter(
+     *          name="id",
+     *          description="trophies id",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *     ),
+     *     @OA\Response(
+     *          response="200", 
+     *          description="Successful operation.",
+     *          @OA\JsonContent(
+     *              @OA\Examples(example="result", value={
+     *                      "id": 1, 
+     *                      "type_id": "1", 
+     *                      "title": "Tournament",
+     *                      "ranking": "1",
+     *                      "date": "2000-01-01",
+     *                      "category_id": "1",
+     *                      "place": "New York",
+     *                      "oponent": "Bad Guys",
+     *                      "score": "80/0",
+     *                      "price": "50000",
+     *                      "club_name": "NY Sports Club",
+     *                      "image": "image.jpg",
+     *                      "created_at": "2022-07-29 07:53:36", 
+     *                      "updated_at": "2022-07-29 07:53:36"
+     *              }, summary="A trophies.")
+     *          )
+     *     )
+     * )
+     */
+    public function filterByType(Type $type)
+    {
+        return $type->trophies;
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/trophies/filterByRank/{rank}",
+     *     tags={"Trophies"},
+     *     summary="Get trophies information",
+     *     description="Returns trophies data",
+     *     security={{"bearer_token":{}}},
+     *     @OA\Parameter(
+     *          name="rank",
+     *          description="rank value",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *     ),
+     *     @OA\Response(
+     *          response="200", 
+     *          description="Successful operation.",
+     *          @OA\JsonContent(
+     *              @OA\Examples(example="result", value={
+     *                      "id": 1, 
+     *                      "type_id": "1", 
+     *                      "title": "Tournament",
+     *                      "ranking": "1",
+     *                      "date": "2000-01-01",
+     *                      "category_id": "1",
+     *                      "place": "New York",
+     *                      "oponent": "Bad Guys",
+     *                      "score": "80/0",
+     *                      "price": "50000",
+     *                      "club_name": "NY Sports Club",
+     *                      "image": "image.jpg",
+     *                      "created_at": "2022-07-29 07:53:36", 
+     *                      "updated_at": "2022-07-29 07:53:36"
+     *              }, summary="A trophies.")
+     *          )
+     *     )
+     * )
+     */
+    public function filterByRank(Request $request, $rank)
+    {
+        return Trophy::where('ranking', '=', $rank)->get();
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/trophies/filterByCategory/{id}",
+     *     tags={"Trophies"},
+     *     summary="Get trophies information",
+     *     description="Returns trophies data",
+     *     security={{"bearer_token":{}}},
+     *     @OA\Parameter(
+     *          name="id",
+     *          description="category id",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *     ),
+     *     @OA\Response(
+     *          response="200", 
+     *          description="Successful operation.",
+     *          @OA\JsonContent(
+     *              @OA\Examples(example="result", value={
+     *                      "id": 1, 
+     *                      "type_id": "1", 
+     *                      "title": "Tournament",
+     *                      "ranking": "1",
+     *                      "date": "2000-01-01",
+     *                      "category_id": "1",
+     *                      "place": "New York",
+     *                      "oponent": "Bad Guys",
+     *                      "score": "80/0",
+     *                      "price": "50000",
+     *                      "club_name": "NY Sports Club",
+     *                      "image": "image.jpg",
+     *                      "created_at": "2022-07-29 07:53:36", 
+     *                      "updated_at": "2022-07-29 07:53:36"
+     *              }, summary="A trophies.")
+     *          )
+     *     )
+     * )
+     */
+    public function filterByCategory(Category $category)
+    {
+        return Trophy::where('category_id', '=', $category->id)->get();
     }
 }

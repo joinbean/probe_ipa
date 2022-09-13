@@ -8,9 +8,17 @@ use Illuminate\Http\Request;
 class CategoryController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @OA\Get(
+     *     path="/categories",
+     *     tags={"Categories"},
+     *     summary="Get list of categories",
+     *     description="Returns list of categories",
+     *     security={{"bearer_token":{}}},
+     *     @OA\Response(
+     *          response="200", 
+     *          description="Successful operation."
+     *     )
+     * )
      */
     public function index()
     {
@@ -21,10 +29,45 @@ class CategoryController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @OA\Post(
+     *     path="/categories",
+     *     tags={"Categories"},
+     *     summary="Store new category",
+     *     description="Returns category data",
+     *     security={{"bearer_token":{}}},
+     *     @OA\RequestBody(
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\Schema(
+     *                @OA\Property(
+     *                    property="name",
+     *                    type="string"
+     *                ),
+     *                @OA\Property(
+     *                    property="color_id",
+     *                    type="integer"
+     *                ),
+     *                example={
+     *                      "id": 1,
+     *                      "user_id": 1,
+     *                      "name": "Tennis",
+     *                      "category_type_id": "2"
+     *                }
+     *              )
+     *              
+     *          )
+     *     ),
+     *     @OA\Response(
+     *          response="201", 
+     *          description="Successful operation.",
+     *          @OA\JsonContent(
+     *              @OA\Examples(example="result", value={"success": true}, summary="A result object.")
+     *          )
+     *     ),
+     *     @OA\Response(
+     *          response="422",
+     *          description="The given data was invalid.")
+     * )
      */
     public function store(Request $request)
     {
@@ -43,10 +86,29 @@ class CategoryController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Category  $category
-     * @return \Illuminate\Http\Response
+     * @OA\Get(
+     *     path="/categories/{id}",
+     *     tags={"Categories"},
+     *     summary="Get categories information",
+     *     description="Returns categories data",
+     *     security={{"bearer_token":{}}},
+     *     @OA\Parameter(
+     *          name="id",
+     *          description="category id",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *     ),
+     *     @OA\Response(
+     *          response="200", 
+     *          description="Successful operation.",
+     *          @OA\JsonContent(
+     *              @OA\Examples(example="result", value={"id": 1, "name": "Tennis", "color_id": "1", "created_at": "2022-07-29 07:53:36", "updated_at": "2022-07-29 07:53:36"}, summary="A categories.")
+     *          )
+     *     )
+     * )
      */
     public function show(Category $category)
     {
@@ -54,11 +116,52 @@ class CategoryController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Category  $category
-     * @return \Illuminate\Http\Response
+     * @OA\Put(
+     *     path="/categories/{id}",
+     *     tags={"Categories"},
+     *     summary="Update categories information",
+     *     description="Updates categories data",
+     *     security={{"bearer_token":{}}},
+     *     @OA\Parameter(
+     *          name="id",
+     *          description="categories id",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *     ),
+     *     @OA\RequestBody(
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\Schema(
+     *                @OA\Property(
+     *                    property="name",
+     *                    type="string"
+     *                ),
+     *                @OA\Property(
+     *                    property="color_id",
+     *                    type="integer"
+     *                ),
+     *                example={
+     *                      "name": "Tennis",
+     *                      "color_id": "1"
+     *                }
+     *              )
+     *              
+     *          )
+     *     ),
+     *     @OA\Response(
+     *          response="200", 
+     *          description="Successful operation.",
+     *          @OA\JsonContent(
+     *              @OA\Examples(example="result", value={"id": 1, "name": "Tennis", "color_id": "1", "created_at": "2022-07-29 07:53:36", "updated_at": "2022-07-29 07:53:36"}, summary="A categories.")
+     *          )
+     *     ),
+     *     @OA\Response(
+     *          response="422",
+     *          description="The given data was invalid.")
+     * )
      */
     public function update(Request $request, Category $category)
     {
@@ -76,10 +179,30 @@ class CategoryController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Category  $category
-     * @return \Illuminate\Http\Response
+     * @OA\Delete(
+     *     path="/categories/{id}",
+     *     tags={"Categories"},
+     *     summary="Delete existing categories",
+     *     description="Deletes a record",
+     *     security={{"bearer_token":{}}},
+     *     @OA\Parameter(
+     *          name="id",
+     *          description="categories id",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *     ),
+     *     @OA\Response(
+     *          response="200", 
+     *          description="Successful operation.",
+     *          @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *          response="404",
+     *          description="No such categories.")
+     * )
      */
     public function destroy(Category $category)
     {
