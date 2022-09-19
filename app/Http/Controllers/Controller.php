@@ -51,7 +51,7 @@ use Illuminate\Routing\Controller as BaseController;
  *     description="API Endpoints of Trophies"
  * )
  * 
- * @OAS\SecurityScheme(
+ * @OA\SecurityScheme(
  *      securityScheme="bearer_token",
  *      type="http",
  *      scheme="bearer"

@@ -14,7 +14,7 @@
     },
     "servers": [
         {
-            "url": "http://my-default-host.com",
+            "url": "http://localhost:8000/api/",
             "description": "Trophy Manager API Server"
         }
     ],
@@ -978,6 +978,14 @@
                         "bearer_token": []
                     }
                 ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearer_token": {
+                "type": "http",
+                "scheme": "bearer"
             }
         }
     },
