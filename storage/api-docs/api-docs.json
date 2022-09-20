@@ -163,10 +163,8 @@
                                 },
                                 "type": "object",
                                 "example": {
-                                    "id": 1,
-                                    "user_id": 1,
                                     "name": "Tennis",
-                                    "category_type_id": "2"
+                                    "color_id": "2"
                                 }
                             }
                         }
@@ -403,7 +401,7 @@
                 "operationId": "161f6c0e2e31e2368d78d40f1aa4ffb7",
                 "requestBody": {
                     "content": {
-                        "application/json": {
+                        "multipart/form-data": {
                             "schema": {
                                 "properties": {
                                     "type_id": {
@@ -438,7 +436,7 @@
                                         "type": "string"
                                     },
                                     "image": {
-                                        "type": "image"
+                                        "type": "file"
                                     }
                                 },
                                 "type": "object",
@@ -563,7 +561,7 @@
                 ],
                 "requestBody": {
                     "content": {
-                        "application/json": {
+                        "multipart/form-data": {
                             "schema": {
                                 "properties": {
                                     "type_id": {
@@ -598,7 +596,7 @@
                                         "type": "string"
                                     },
                                     "image": {
-                                        "type": "image"
+                                        "type": "file"
                                     }
                                 },
                                 "type": "object",
@@ -789,19 +787,19 @@
                 ]
             }
         },
-        "/trophies/filterByType{id}": {
+        "/trophies/filterByType/{id}": {
             "get": {
                 "tags": [
                     "Trophies"
                 ],
                 "summary": "Get trophies information",
                 "description": "Returns trophies data",
-                "operationId": "3bb19ae65a50a24ad2ea0d5a7d5256c2",
+                "operationId": "bec836bb6e87a1c67f3825d67504febd",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "trophies id",
+                        "description": "type id",
                         "required": true,
                         "schema": {
                             "type": "integer"

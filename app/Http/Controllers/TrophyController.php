@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Trophy;
 use App\Models\Type;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class TrophyController extends Controller
 {
@@ -39,7 +40,7 @@ class TrophyController extends Controller
      *     security={{"bearer_token":{}}},
      *     @OA\RequestBody(
      *          @OA\MediaType(
-     *              mediaType="application/json",
+     *              mediaType="multipart/form-data",
      *              @OA\Schema(
      *                @OA\Property(
      *                    property="type_id",
@@ -83,7 +84,7 @@ class TrophyController extends Controller
      *                ),
      *                 @OA\Property(
      *                    property="image",
-     *                    type="image"
+     *                    type="file"
      *                ),
      *                example={
      *                      "type_id": "1", 
@@ -129,6 +130,12 @@ class TrophyController extends Controller
             'club_name' => 'required|string|max:255',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
+
+        $user = auth('sanctum')->user();
+        $category = Category::where('id', '=', $validated['category_id'])->first();
+        if ($category->user_id !== $user->id) {
+            return response()->json(['Forbidden'], 403);
+        } 
 
         $image_path = $request->file('image')->store('image', 'public');
 
@@ -195,7 +202,12 @@ class TrophyController extends Controller
      */
     public function show(Trophy $trophy)
     {
-        return response()->json([$trophy]);
+        $user = auth('sanctum')->user();
+        if ($user->id === $trophy->user_id) {
+            return response()->json([$trophy]);
+        } else {
+            return response()->json(['Forbidden'], 403);
+        }
     }
 
     /**
@@ -216,7 +228,7 @@ class TrophyController extends Controller
      *     ),
      *     @OA\RequestBody(
      *          @OA\MediaType(
-     *              mediaType="application/json",
+     *              mediaType="multipart/form-data",
      *              @OA\Schema(
      *                @OA\Property(
      *                    property="type_id",
@@ -260,7 +272,7 @@ class TrophyController extends Controller
      *                ),
      *                 @OA\Property(
      *                    property="image",
-     *                    type="image"
+     *                    type="file"
      *                ),
      *                example={
      *                      "type_id": "1", 
@@ -322,6 +334,13 @@ class TrophyController extends Controller
             'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
 
+        $trophy = $trophy;
+
+        $user = auth('sanctum')->user();
+        if ($user->id !== $trophy->user_id) {
+            return response()->json(['Forbidden'], 403);
+        }
+        
         $trophy->type_id        = array_key_exists('type_id', $validated)       ? $validated['type_id']     : $trophy->type_id;
         $trophy->title          = array_key_exists('title', $validated)         ? $validated['title']       : $trophy->title;
         $trophy->ranking        = array_key_exists('ranking', $validated)       ? $validated['ranking']     : $trophy->ranking;
@@ -337,6 +356,17 @@ class TrophyController extends Controller
             $image_path = $request->file('image')->store('image', 'public');
             $trophy->image = $image_path;
         }
+
+        if ($trophy->category_id !== null) {
+            if (!Category::where('id', '=', $trophy->category_id)->exists()) {
+                $trophy->category_id = null;
+            }
+            $category = Category::where('id', '=', $trophy->category_id)->first();
+            if ($category->user_id !== $user->id) {
+                return response()->json(['Forbidden'], 403);
+            } 
+        }
+        
         
         $trophy->update();
 
@@ -371,9 +401,14 @@ class TrophyController extends Controller
      */
     public function destroy(Trophy $trophy)
     {
-        $trophy->delete();
+        $user = auth('sanctum')->user();
+        if ($user->id === $trophy->user_id) {
+            $trophy->delete();
 
-        return response()->json(['message' => 'success'], 200);
+            return response()->json(['message' => 'success'], 200);
+        } else {
+            return response()->json(['Forbidden'], 403);
+        }
     }
 
     /**
@@ -409,7 +444,8 @@ class TrophyController extends Controller
      */
     public function sortByDate()
     {
-        return Trophy::orderBy('date')->get();
+        $user = auth('sanctum')->user();
+        return $user->trophies->sortBy('date')->values()->all();
     }
 
     /**
@@ -445,19 +481,20 @@ class TrophyController extends Controller
      */
     public function sortByRank()
     {
-        return Trophy::orderBy('ranking')->get();
+        $user = auth('sanctum')->user();
+        return $user->trophies->sortBy('ranking')->values()->all();
     }
 
     /**
      * @OA\Get(
-     *     path="/trophies/filterByType{id}",
+     *     path="/trophies/filterByType/{id}",
      *     tags={"Trophies"},
      *     summary="Get trophies information",
      *     description="Returns trophies data",
      *     security={{"bearer_token":{}}},
      *     @OA\Parameter(
      *          name="id",
-     *          description="trophies id",
+     *          description="type id",
      *          required=true,
      *          in="path",
      *          @OA\Schema(
@@ -490,7 +527,8 @@ class TrophyController extends Controller
      */
     public function filterByType(Type $type)
     {
-        return $type->trophies;
+        $user = auth('sanctum')->user();
+        return $type->trophies->where('user_id', '=', $user->id);
     }
 
     /**
@@ -535,7 +573,9 @@ class TrophyController extends Controller
      */
     public function filterByRank(Request $request, $rank)
     {
-        return Trophy::where('ranking', '=', $rank)->get();
+        $user = auth('sanctum')->user();
+        return response()->json([Trophy::where('user_id', '=', $user->id)->where('ranking', '=', $rank)->get()]);
+        return ;
     }
 
     /**

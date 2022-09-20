@@ -38,9 +38,13 @@ Route::resource('categories', CategoryController::class)->only([
 Route::get('/trophies/sortByDate', [TrophyController::class, 'sortByDate']);
 Route::get('/trophies/sortByRank', [TrophyController::class, 'sortByRank']);
 
-Route::get('/trophies/filterByType/{type}', [TrophyController::class, 'filterByType']);
-Route::get('/trophies/filterByRank/{rank}', [TrophyController::class, 'filterByRank']);
-Route::get('/trophies/filterByCategory/{category}', [TrophyController::class, 'filterByCategory']);
+Route::get('/trophies/filterByType/{type:id}', [TrophyController::class, 'filterByType'])->missing(function () {
+    return response()->json(["message" => "The given data was invalid.", "errors" => ["category_id" => ["The selected type id is invalid."]]], 422);
+});
+Route::get('/trophies/filterByRank/{rank_value}', [TrophyController::class, 'filterByRank']);
+Route::get('/trophies/filterByCategory/{category:id}', [TrophyController::class, 'filterByCategory'])->missing(function () {
+    return response()->json(["message" => "The given data was invalid.", "errors" => ["category_id" => ["The selected category id is invalid."]]], 422);
+});
 
 Route::resource('trophies', TrophyController::class)->only([
     'index', 'store', 'show', 'update', 'destroy'

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class CategoryController extends Controller
 {
@@ -48,10 +49,8 @@ class CategoryController extends Controller
      *                    type="integer"
      *                ),
      *                example={
-     *                      "id": 1,
-     *                      "user_id": 1,
      *                      "name": "Tennis",
-     *                      "category_type_id": "2"
+     *                      "color_id": "2"
      *                }
      *              )
      *              
@@ -112,7 +111,13 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        return response()->json([$category]);
+        $user = auth('sanctum')->user();
+        if ($user->id === $category->user_id) {
+            return response()->json([$category]);
+        } else {
+            return response()->json(['Forbidden'], 403);
+        }
+        
     }
 
     /**
@@ -165,17 +170,22 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        $validated = $request->validate([
-            'name' => 'string|max:255',
-            'color_id' => 'exists:colors,id'
-        ]);
-
-        $category->name         =   array_key_exists('name', $validated)        ? $validated['name']        : $category->name;
-        $category->color_id     =   array_key_exists('color_id', $validated)    ? $validated['color_id']    : $category->color_id;
-
-        $category->save();
-
-        return response()->json(['message' => 'success'], 200);
+        $user = auth('sanctum')->user();
+        if ($user->id === $category->user_id) {
+            $validated = $request->validate([
+                'name' => 'string|max:255',
+                'color_id' => 'exists:colors,id'
+            ]);
+    
+            $category->name         =   array_key_exists('name', $validated)        ? $validated['name']        : $category->name;
+            $category->color_id     =   array_key_exists('color_id', $validated)    ? $validated['color_id']    : $category->color_id;
+    
+            $category->save();
+    
+            return response()->json(['message' => 'success'], 200);
+        } else {
+            return response()->json(['Forbidden'], 403);
+        }
     }
 
     /**
@@ -206,8 +216,13 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        $category->delete();
+        $user = auth('sanctum')->user();
+        if ($user->id === $category->user_id) {
+            $category->delete();
 
-        return response()->json(['message' => 'success'], 200);
+            return response()->json(['message' => 'success'], 200);
+        } else {
+            return response()->json(['Forbidden'], 403);
+        }
     }
 }
